@@ -53,7 +53,6 @@ zscore_list = []
 # Nested loops to finally convert the KO list to a directed graph of input and output compounds	
 for line in infile:
 	current_ko = str(line.split()[1]).strip('ko:')
-	#current_ko = str(line.split()[0]).strip('ko:')
 	triedCountKO += 1
 			
 	try:
