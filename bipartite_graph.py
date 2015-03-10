@@ -12,14 +12,14 @@ zscore_infile = open(sys.argv[2], 'r')
 zscore_dictionary = {}
 for index in zscore_infile:
 	index_split = index.split()
-	zscore_dictionary[index_split[0]] = index_split[1]
+	zscore_dictionary[index_split[0]] = float(index_split[1])
 
 # Read in pickled KO to reaction dictionary
-ko_reactionpkl_path = script_path + '/support/ko_reaction.pkl'
+ko_reactionpkl_path = script_path + '/ko_reaction.pkl'
 ko_dict = pickle.load(open(ko_reactionpkl_path, 'rb'))
 
 # Read in pickled reaction to reaction_mapformula dictionary
-reaction_mapformulapkl_path = script_path + '/support/reaction_mapformula.pkl'
+reaction_mapformulapkl_path = script_path + '/reaction_mapformula.pkl'
 reaction_dict = pickle.load(open(reaction_mapformulapkl_path, 'rb'))
 
 infile = open(sys.argv[1], 'r')
@@ -107,13 +107,13 @@ composite_zscore_dict = {}
 for index in network_list:
 	outfile.write(index)
 	edge_info = index.split()
-		
+	
 	# Output
 	if edge_info[0][0] == 'K':
 		if not edge_info[1] in output_zscore_dict.keys():
 		
 			try:
-				temp_zscore = zscore_dictionary[edge_info[1]]
+				temp_zscore = zscore_dictionary[edge_info[0]]
 			except KeyError:
 				temp_zscore = 0
 		
@@ -125,7 +125,7 @@ for index in network_list:
 		if not edge_info[1] in composite_zscore_dict.keys():
 			
 			try:
-				temp_zscore = zscore_dictionary[edge_info[1]]
+				temp_zscore = zscore_dictionary[edge_info[0]]
 			except KeyError:
 				temp_zscore = 0
 		
@@ -134,15 +134,15 @@ for index in network_list:
 			composite_zscore_dict[edge_info[1]].append(temp_zscore)
 		continue
 		
-		# MIGHT NEED TO REVERSE WHAT I DID HERE
+
 	# Input
 	elif edge_info[1][0] == 'K':
 		if not edge_info[0] in input_zscore_dict.keys():
 			try:
-				temp_zscore = zscore_dictionary[edge_info[0]]
+				temp_zscore = zscore_dictionary[edge_info[1]]
 			except KeyError:
 				temp_zscore = 0
-
+			
 			input_zscore_dict[edge_info[0]] = [temp_zscore]
 			
 		else:
@@ -151,7 +151,7 @@ for index in network_list:
 		# Composite	2
 		if not edge_info[0] in composite_zscore_dict.keys():
 			try:
-				temp_zscore = zscore_dictionary[edge_info[0]]
+				temp_zscore = zscore_dictionary[edge_info[1]]
 			except KeyError:
 				temp_zscore = 0
 				
@@ -173,20 +173,28 @@ compositescorefile_name = infile_name + '.composite_zscore.txt'
 compositescorefile = open(compositescorefile_name, 'w')
 
 for index in compound_list:
-
-	input_scores = input_zscore_dict[index]
 	
-	final_score = sum(input_scores) / math.sqrt(len(input_scores))
-	inputscorefile.write('\t'.join([index, str(final_score), '\n']))
+	try:
+		input_scores = input_zscore_dict[index]
+		final_score = sum(input_scores) / math.sqrt(len(input_scores))
+		inputscorefile.write('\t'.join([index, str(final_score), '\n']))
+	except KeyError:
+		pass
 	
-	output_scores = output_zscore_dict[index]
-	final_score = sum(output_scores) / math.sqrt(len(output_scores))
-	outputscorefile.write('\t'.join([index, str(final_score), '\n']))
+	try:
+		output_scores = output_zscore_dict[index]
+		final_score = sum(output_scores) / math.sqrt(len(output_scores))
+		outputscorefile.write('\t'.join([index, str(final_score), '\n']))
+	except KeyError:
+		pass
 	
-	composite_scores = composite_zscore_dict[index]
-	final_score = sum(composite_scores) / math.sqrt(len(composite_scores))
-	compositescorefile.write('\t'.join([index, str(final_score), '\n']))
-
+	try:	
+		composite_scores = composite_zscore_dict[index]
+		final_score = sum(composite_scores) / math.sqrt(len(composite_scores))
+		compositescorefile.write('\t'.join([index, str(final_score), '\n']))
+	except KeyError:
+		pass
+		
 inputscorefile.close()
 outputscorefile.close()
 compositescorefile.close()
