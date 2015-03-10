@@ -92,7 +92,7 @@ errorfile.write(''.join(['KOs successfully translated to Reactions: ', str(tried
 errorfile.write(''.join(['KOs unsuccessfully translated to Reactions: ', str(excludedCountKO), '\n']))
 
 errorfile.write(''.join(['Reactions successfully translated to Compounds: ', str(triedCountReact - excludedCountReact), '\n']))
-errorfile.write(''.join(['Reactions unsuccessfully translated to Compounds: ', str(excludedCountReact)]))
+errorfile.write(''.join(['Reactions unsuccessfully translated to Compounds: ', str(excludedCountReact), '\n']))
 
 errorfile.close()
 
