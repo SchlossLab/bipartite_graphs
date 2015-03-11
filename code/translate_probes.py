@@ -26,6 +26,8 @@ koIDs.close()
 
 gene = 'HELLO WORLD'
 
+
+# Loop to translate probes
 for index in exp_data:
 
 	index_split = index.split()
