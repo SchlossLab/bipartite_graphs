@@ -1,10 +1,11 @@
 
 import sys
 import os
+import math
 
-exp_data = open(sys.argv[1], 'r')
-probeIDs = open(sys.argv[2], 'r')
-koIDs = open(sys.argv[3], 'r')
+exp_data = open(sys.argv[1], 'r') # raw microarray data
+probeIDs = open(sys.argv[2], 'r') # translation key for probe IDs to genes
+koIDs = open(sys.argv[3], 'r') # translation key for genes to KOs
 
 infile_name = str(sys.argv[1]).split('/')[-1]
 infile_name = infile_name.split('.')[0]
@@ -45,6 +46,7 @@ for index in exp_data:
 		print('KO translation error: ' + str(gene) + ' included as gene')
 		ko = gene
 		continue
+	
 	
 	outfile.write('\t'.join([ko, str(index_split[1])]))
 	outfile.write('\n')

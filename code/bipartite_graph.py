@@ -4,10 +4,11 @@ import os
 import pickle
 import math
 
+# Set starting path
 starting_directory = str(os.getcwd())
 script_path = str(os.path.dirname(os.path.realpath(__file__)))
 
-# Create dictionary for zscores
+# Create dictionary for zscores of each KO
 zscore_infile = open(sys.argv[2], 'r')
 zscore_dictionary = {}
 for index in zscore_infile:
@@ -15,19 +16,24 @@ for index in zscore_infile:
 	zscore_dictionary[index_split[0]] = float(index_split[1])
 
 # Read in pickled KO to reaction dictionary
-ko_reactionpkl_path = script_path + '/ko_reaction.pkl'
+ko_reactionpkl_path = '../data/ko_reaction.pkl'
 ko_dict = pickle.load(open(ko_reactionpkl_path, 'rb'))
 
 # Read in pickled reaction to reaction_mapformula dictionary
-reaction_mapformulapkl_path = script_path + '/reaction_mapformula.pkl'
+reaction_mapformulapkl_path = '../data/reaction_mapformula.pkl'
 reaction_dict = pickle.load(open(reaction_mapformulapkl_path, 'rb'))
 
-infile = open(sys.argv[1], 'r')
+infile = open(sys.argv[1], 'r') # Total KO list for the organism of interest
 
 infile_name = str(sys.argv[1]).split('/')[-1]
 infile_name = infile_name.split('.')[0]
 
-directory = str(os.getcwd()) + '/' + infile_name + '.bipartite.files'
+
+# get condition from second input file
+
+
+
+directory = '../results/' + infile_name + '.bipartite.files'
 if not os.path.exists(directory):	
 	os.makedirs(directory)
 os.chdir(directory)
@@ -194,7 +200,9 @@ for index in compound_list:
 	except KeyError:
 		pass
 		
+		
 inputscorefile.close()
 outputscorefile.close()
 compositescorefile.close()
 os.chdir(starting_directory)		
+
