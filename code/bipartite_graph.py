@@ -1,4 +1,6 @@
 
+#  Use:  python bipartite_graph.py full_KO_list KOs_with_zscores 
+
 import sys
 import os
 import pickle
